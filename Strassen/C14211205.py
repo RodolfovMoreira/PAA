@@ -87,7 +87,7 @@ def multiplicar(matrizA, matrizB):
                 auxiliarC[i][j] += matrizA[i][k] * matrizB[k][j]
     return auxiliarC
 
-def strassen(matrizA , matrizB):
+def Strassen_inception(matrizA , matrizB):
 	# Coloque seu código aqui
 	dimensao = len(matrizA)
 
@@ -151,27 +151,27 @@ def strassen(matrizA , matrizB):
 		#Strassen é aplicado recursivamente		
 		auxiliarA = soma(a11,a22)
 		auxiliarB = soma(b11,b22)
-		p1 = strassen(auxiliarA, auxiliarB)
+		p1 = Strassen_inception(auxiliarA, auxiliarB)
 
 		auxiliarA = soma(a21, a22)
-		p2 = strassen(auxiliarA, b11)
+		p2 = Strassen_inception(auxiliarA, b11)
 
 		auxiliarB = subtracao(b12,b22)
-		p3 = strassen(a11, auxiliarB)
+		p3 = Strassen_inception(a11, auxiliarB)
 
 		auxiliarB = subtracao(b21, b11)
-		p4 = strassen(a22, auxiliarB)
+		p4 = Strassen_inception(a22, auxiliarB)
 
 		auxiliarA = soma(a11, a12)
-		p5 = strassen(auxiliarA, b22)
+		p5 = Strassen_inception(auxiliarA, b22)
 
 		auxiliarA = subtracao(a21, a11)
 		auxiliarB = soma(b11, b12)
-		p6 = strassen(auxiliarA, auxiliarB)
+		p6 = Strassen_inception(auxiliarA, auxiliarB)
 
 		auxiliarA = subtracao(a12, a22)
 		auxiliarB = soma(b21, b22)
-		p7 = strassen(auxiliarA, auxiliarB)
+		p7 = Strassen_inception(auxiliarA, auxiliarB)
 
 		#calculando a matriz resultado
 
@@ -199,39 +199,77 @@ def strassen(matrizA , matrizB):
 
 		return matrizC
 
-m_dim_matrizes = 0
-dim_final = 0
+def Strassen(matrizA, matrizB):
+		
+	m_dim_matrizes = 0
+	dim_final = 0
+	#-------------------------------- Formatando as matrizes -----------------------
+	lineM1 = len(matrizA)
+	rowM1 = len(matrizA[0])
 
-m1 , m2, lineM1, rowM1, lineM2, rowM2 = readFiles( 'M1.in' , 'M2.in' )
+	lineM2 = len(matrizB)
+	rowM2 = len(matrizB[0])
 
-#print('As dimensões das matrizes são: ',lineM1, rowM1, lineM2, rowM2)
+	#print(lineM1, rowM1, 'e', lineM2, rowM2)
 
-m_dim_matrizes = dimensaoDominante(lineM1, rowM1, lineM2, rowM2)
+	#m1 , m2, lineM1, rowM1, lineM2, rowM2 = readFiles( 'M1.in' , 'M2.in')
 
-#print('A maior dimensão entre as matrizes é: ',m_dim_matrizes)
+	m_dim_matrizes = dimensaoDominante(lineM1, rowM1, lineM2, rowM2)
 
-dim_final = dimensaoFinal(m_dim_matrizes)
+	dim_final = dimensaoFinal(m_dim_matrizes)
 
-#print('A dimensão final para aplicação do algoritmo Strassen será de: ', dim_final)
+	matrizA = criarMatriz(dim_final)
+	matrizB = criarMatriz(dim_final)
+
+	somarMatrizes(m1, matrizA, lineM1, rowM1)
+	somarMatrizes(m2, matrizB, lineM2, rowM2)
+	#----------------------------------------------------------------------------------
 
 
-# ------------------------------------------------
-matrizA = criarMatriz(dim_final)
-matrizB = criarMatriz(dim_final)
+	matriz_resultado = Strassen_inception(matrizA, matrizB)
+	
+	#A partir daqui irei transpor a matriz resultado para outra que só contenha os espacos necessários
+	colunas = 0
+	linhas = 0
+	largura = len(matriz_resultado)-1
 
-somarMatrizes(m1, matrizA, lineM1, rowM1)
-somarMatrizes(m2, matrizB, lineM2, rowM2)
+	if(matriz_resultado[largura][largura] != 0):
+		return matriz_resultado
+	else:
+		linhas = linhas_matriz(matriz_resultado)
+		colunas = colunas_matriz(matriz_resultado)
 
-matriz_resultado = strassen(matrizA, matrizB)
+	resultadofinal = [[0 for x in range(0,colunas)] for x in range(0, linhas)]
+
+
+	for i in range(0, linhas):
+		for j in range(0, colunas):
+			resultadofinal[i][j] = matriz_resultado[i][j]
+
+	return resultadofinal
+
+def linhas_matriz(matriz_resultado):
+	linhas = 0
+	largura = len(matriz_resultado)
+	for i in range(0,len(matriz_resultado)):
+		if(matriz_resultado[i][0] != 0):
+			linhas = linhas + 1
+	return linhas
+
+def colunas_matriz(matriz_resultado):
+	colunas = 0
+	#print(matriz_resultado)
+	for i in range(0,len(matriz_resultado)):
+		if(matriz_resultado[0][i] != 0):
+			colunas = colunas + 1
+	return colunas
+
+
+
+
+#m1 , m2, lineM1, rowM1, lineM2, rowM2 = readFiles( 'M1.in' , 'M2.in')
+
+#matriz_resultado = Strassen(m1, m2)
 
 #print(matriz_resultado)
 
-#imprimindo no arquivo o resultado
-file = open("M3.out", "w") 
-for i in range(0,lineM1):
-	for j in range(0, rowM2):
-		file.write(str(matriz_resultado[i][j]))
-		file.write(' ')
-	file.write('\n')
-
-file.close()
