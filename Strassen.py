@@ -58,10 +58,34 @@ def readFiles( name_m1 , name_m2 ):
 
 	return matrix1, matrix2, lineM1, rowM1, lineM2, rowM2
 
-def Strassen( matrizA , matrizB, dimensao):
+def soma(m1, m2): #diferente da somarMatrizes esta funcao soma duas matrizes do mesmo tamanho
+	tamanho = len(m1)
+	aux = criarMatriz(tamanho)
+
+	for i in range(0,tamanho):
+		for j in range(0,tamanho):
+			aux[i][j] = m1[i][j] + m2[i][j]
+
+	return aux
+
+def subtracao(m1, m2): #esta funcao subtrai duas matrizes do mesmo tamanho
+	tamanho = len(m1)
+	aux = criarMatriz(tamanho)
+
+	for i in range(0,tamanho):
+		for j in range(0,tamanho):
+			aux[i][j] = m1[i][j] - m2[i][j]
+
+	return aux
+
+def strassen(matrizA , matrizB):
 	# Coloque seu código aqui
+	dimensao = len(matrizA)
+
 	if(dimensao<=2):
 		#caso base Strassen
+		matrizC = criarMatriz(dimensao)
+
 		p1 = matrizA[0[0]] * (matrizB[0][1] - matrizB[1][1]) #p1=a(f-h)
 		p2 = (matrizA[0][0] + matrizA[0][1]) * matrizB[1][1] #p2=(a+b)h
 		p3 = (matrizA[1][0] + matrizA[1][1]) * matrizB[0][0] #p3=(c+d)e
@@ -78,9 +102,86 @@ def Strassen( matrizA , matrizB, dimensao):
 		return matrizC
 	else:
 		#dividir as dimensoes por 2 e passar as matrizes para strassen
-		
+		dim_metade = dimensao/2
 
-	pass
+		#aplicando a lógica do Strassen porém cada espaço é uma matriz
+
+		a11 = criarMatriz(dim_metade)
+		a12 = criarMatriz(dim_metade)
+		a21 = criarMatriz(dim_metade)
+		a22 = criarMatriz(dim_metade)
+
+		b11 = criarMatriz(dim_metade)
+		b12 = criarMatriz(dim_metade)
+		b21 = criarMatriz(dim_metade)
+		b22 = criarMatriz(dim_metade)
+
+		#matrizes auxiliares
+		auxiliarA = criarMatriz(dim_metade)
+		auxiliarB = criarMatriz(dim_metade)
+
+		for i in range(0, dim_metade): #separando a matriz original em 4
+			for j in range(0, dim_metade):
+				a11[i][j] = matrizA[i][j]
+				a12[i][j] = matrizA[i][j + dim_metade]
+				a21[i][j] = matrizA[i + dim_metade][j]
+				a22[i][j] = matrizA[i + dim_metade][j + dim_metade]
+
+				b11[i][j] = matrizB[i][j]
+				b12[i][j] = matrizB[i][j + dim_metade]
+				b21[i][j] = matrizB[i + dim_metade][j]
+				b22[i][j] = matrizB[i + dim_metade][j + dim_metade]
+		
+		#Strassen é aplicado recursivamente		
+		auxiliarA = soma(a11,a22)
+		auxiliarB = soma(b11,b22)
+		p1 = strassen(auxiliarA, auxiliarB)
+
+		auxiliarA = soma(a21, a22)
+		p2 = strassen(auxiliarA, b11)
+
+		auxiliarB = subtracao(b12,b22)
+		p3 = strassen(a11, auxiliarB)
+
+		auxiliarB = subtracao(b21, b11)
+		p4 = strassen(a22, auxiliarB)
+
+		auxiliarA = soma(a11, a12)
+		p5 = strassen(auxiliarA, b22)
+
+		auxiliarA = subtracao(a21, a11)
+		auxiliarB = soma(b11, b12)
+		p6 = strassen(auxiliarA, auxiliarB)
+
+		auxiliarA = subtracao(a12, a22)
+		auxiliarB = soma(b21, b22)
+		p7 = strassen(auxiliarA, auxiliarB)
+
+		#calculando a matriz resultado
+
+		c12 = soma(p3, p5)
+		c21 = soma(p2, p4)
+
+		auxiliarA = soma(p1, p4)
+		auxiliarB = soma(auxiliarA, p7)
+		c11 = subtracao(auxiliarB, p5)
+
+		auxiliarA = soma(p1, p3)
+		auxiliarB = soma(auxiliarA, p6)
+		c22 = subtracao(auxiliarB, p2)
+
+		#juntando os resultados
+
+		matrizC = criarMatriz(dimensao)
+
+		for i in range(0, dim_metade):
+			for j in range(0, dim_metade):
+				matrizC[i][j] = c11[i][j]
+				matrizC[i][j + dim_metade] = c12[i][j]
+				matrizC[i + dim_metade][j] = c21[i][j]
+				matrizC[i + dim_metade][j + dim_metade] = c22[i][j]
+
+		return matrizC
 
 m_dim_matrizes = 0
 dim_final = 0
