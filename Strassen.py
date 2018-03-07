@@ -170,7 +170,7 @@ def strassen(matrizA , matrizB):
 		auxiliarB = soma(auxiliarA, p6)
 		c22 = subtracao(auxiliarB, p2)
 
-		#juntando os resultados
+		#juntando os resultados em uma só matriz
 
 		matrizC = criarMatriz(dimensao)
 
@@ -206,6 +206,7 @@ matrizB = criarMatriz(dim_final)
 somarMatrizes(m1, matrizA, lineM1, rowM1)
 somarMatrizes(m2, matrizB, lineM2, rowM2)
 
-print(matrizA)
-print(matrizB)
+matriz_resultado = strassen(matrizA, matrizB)
+
+print(matriz_resultado)
 
