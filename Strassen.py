@@ -78,15 +78,25 @@ def subtracao(m1, m2): #esta funcao subtrai duas matrizes do mesmo tamanho
 
 	return aux
 
+def multiplicar(matrizA, matrizB):
+    tamanho = len(matrizA)
+    auxiliarC = criarMatriz(tamanho)
+    for i in range(0,tamanho):
+        for k in range(0,tamanho):
+            for j in range(0,tamanho):
+                auxiliarC[i][j] += matrizA[i][k] * matrizB[k][j]
+    return auxiliarC
+
 def strassen(matrizA , matrizB):
 	# Coloque seu código aqui
 	dimensao = len(matrizA)
 
 	if(dimensao<=2):
 		#caso base Strassen
-		matrizC = criarMatriz(dimensao)
+		'''matrizC = criarMatriz(dimensao)
+		#print(matrizA[0][0])
 
-		p1 = matrizA[0[0]] * (matrizB[0][1] - matrizB[1][1]) #p1=a(f-h)
+		p1 = matrizA[0][0] * (matrizB[0][1] - matrizB[1][1]) #p1=a(f-h)
 		p2 = (matrizA[0][0] + matrizA[0][1]) * matrizB[1][1] #p2=(a+b)h
 		p3 = (matrizA[1][0] + matrizA[1][1]) * matrizB[0][0] #p3=(c+d)e
 		p4 = matrizA[1][1] * (matrizB[1][0] - matrizB[0][0]) #p4=d(g-e)
@@ -99,10 +109,16 @@ def strassen(matrizA , matrizB):
 		matrizC[1][0] = p3+p4
 		matrizC[0][1] = p1+p5-p3-p7
 
-		return matrizC
+
+		return matrizC'''
+		#testando com multiplicacao simples tendo como embasamento a matriz ser pequena 2x2
+		return multiplicar(matrizA, matrizB)
 	else:
 		#dividir as dimensoes por 2 e passar as matrizes para strassen
-		dim_metade = dimensao/2
+		dim_metade = dimensao//2
+		#print(10//2)
+		#print(dimensao)
+		#print(dim_metade)
 
 		#aplicando a lógica do Strassen porém cada espaço é uma matriz
 
