@@ -204,15 +204,15 @@ dim_final = 0
 
 m1 , m2, lineM1, rowM1, lineM2, rowM2 = readFiles( 'M1.in' , 'M2.in' )
 
-print('As dimensões das matrizes são: ',lineM1, rowM1, lineM2, rowM2)
+#print('As dimensões das matrizes são: ',lineM1, rowM1, lineM2, rowM2)
 
 m_dim_matrizes = dimensaoDominante(lineM1, rowM1, lineM2, rowM2)
 
-print('A maior dimensão entre as matrizes é: ',m_dim_matrizes)
+#print('A maior dimensão entre as matrizes é: ',m_dim_matrizes)
 
 dim_final = dimensaoFinal(m_dim_matrizes)
 
-print('A dimensão final para aplicação do algoritmo Strassen será de: ', dim_final)
+#print('A dimensão final para aplicação do algoritmo Strassen será de: ', dim_final)
 
 
 # ------------------------------------------------
@@ -224,5 +224,14 @@ somarMatrizes(m2, matrizB, lineM2, rowM2)
 
 matriz_resultado = strassen(matrizA, matrizB)
 
-print(matriz_resultado)
+#print(matriz_resultado)
 
+#imprimindo no arquivo o resultado
+file = open("M3.out", "w") 
+for i in range(0,lineM1):
+	for j in range(0, rowM2):
+		file.write(str(matriz_resultado[i][j]))
+		file.write(' ')
+	file.write('\n')
+
+file.close()
