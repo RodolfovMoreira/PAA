@@ -1,3 +1,15 @@
+"""vertexs = ['A', 'B', 'C', 'D']
+edges = [
+    (1, 'A', 'B'),
+    (5, 'A', 'C'),
+    (3, 'A', 'D'),
+    (4, 'B', 'C'),
+    (2, 'B', 'D'),
+    (1, 'C', 'D'),
+]
+
+print(kruskal(vertexs, edges))"""
+
 parent = dict()
 rank = dict()
 
@@ -23,7 +35,7 @@ def union(v1, v2):
         parent[raiz2] = raiz1
     else:
         parent[raiz2] = raiz1
-        rank[raiz1] += 1 
+        rank[raiz1] += 1
 
 def kruskal(v, edges):
     mst = []
@@ -39,16 +51,40 @@ def kruskal(v, edges):
             mst.append(edge)
     return mst
 
+def lendo_ABC():
+	A,B,C = [int(i) for i in input().split()]
+	lis_aux = (C, A, B)
+	return(lis_aux)
+
+def magica(): #Roda oque é pedido para cada teste
+	i = 0
+	soma = 0
+	edges = []
+	vertices = []
+	n,m = [int(i) for i in input().split()]
+
+	while i != m:
+		edges.append(lendo_ABC())
+		i = i+1
+	i = 1
+	while i != n+1:
+		vertices.append(i)
+		i = i+1
+	
+	#print(vertices)
+	mst = kruskal(vertices, edges)
+	#print(mst)
+
+	for vertices in mst:
+		soma = soma + vertices[0]
+
+	print(soma)
 
 
-vertexs = ['A', 'B', 'C', 'D']
-edges = [
-    (1, 'A', 'B'),
-    (5, 'A', 'C'),
-    (3, 'A', 'D'),
-    (4, 'B', 'C'),
-    (2, 'B', 'D'),
-    (1, 'C', 'D'),
-]
 
-print(kruskal(vertexs, edges))
+n_casos = int(input())
+i = 0
+
+while i != n_casos:
+	magica()
+	i = i+1
