@@ -47,17 +47,7 @@ def magica(): #Roda oque é pedido para cada teste
   lista_locais = [] #locais dos pedidos
   grafo_dic[1] = {} #Pizzaria sempre é o nó inicial
 
-  n,m = [int(i) for i in input().split()] #ARMAZENANDO M E N
-
-  while i != m: #COLOCANDO AS ARESTAS EM UMA LISTA
-    lista_caminhos.append(lendo_ABC())
-    i = i+1
-
-  quantidade_pizzas = int(input())
-  lista_locais = input()
-  aux = lista_locais.split(" ")
-  lista_locais = [int(i) for i in aux] #LISTA DE VERTICES EM INTEIROS
-
+  n,m = [int(i) for i in input().split()] #ARMAZENANDO N E M
 
   i = 1
   while i < n+1: #CRIANDO OS VERTICES NO DICIONARIO
@@ -66,16 +56,30 @@ def magica(): #Roda oque é pedido para cada teste
     i = i+1
 
   i = 0
-  while i < m: #CRIANDO AS ARESTAS
-    a = lista_caminhos[i][0]
-    b = lista_caminhos[i][1]
-    c = lista_caminhos[i][2]
-    grafo_dic[a][b] = c
+  while i != m: #COLOCANDO AS ARESTAS EM UMA LISTA
+    r = lendo_ABC()
+    grafo_dic[r[0]][r[1]] = r[2] #PREENCHENDO O DICIONÁRIO COM AS ARESTAS
+    grafo_dic[r[1]][r[0]] = r[2] #FAZENDO A RECIPROCIDADE
     i = i+1
 
-  for v in grafo_dic:
-    for u in grafo_dic[v]:
-        check_reciprocity(grafo_dic,v,u)
+  quantidade_pizzas = int(input())
+  if(quantidade_pizzas == 0):
+  	return 0
+  lista_locais = [int(i) for i in input().split()] #LISTA DE CASAS
+  #aux = lista_locais.split(" ")
+  #lista_locais = [int(i) for i in aux] #LISTA DE VERTICES EM INTEIROS
+
+  #i = 0
+  #while i < m: #CRIANDO AS ARESTAS
+  #  a = lista_caminhos[i][0]
+  #  b = lista_caminhos[i][1]
+  #  c = lista_caminhos[i][2]
+  #  grafo_dic[a][b] = c
+  #  i = i+1
+
+  #for v in grafo_dic:
+  #  for u in grafo_dic[v]:
+  #      check_reciprocity(grafo_dic,v,u)
 
   distance = dijkstra(grafo_dic, 1)
   
