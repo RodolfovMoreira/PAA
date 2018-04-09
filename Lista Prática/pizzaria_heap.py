@@ -1,30 +1,32 @@
-#Testando com HEAP
 
-import heapq
+import sys
+from heapq import heappush, heappop
 
+class Dijkstra:
+    def __init__(self, adjacents):
+        self.adj = adjacents
+        self.n = len(adjacents)
 
-def dijkstra(graph, starting_vertex):
-    distances = {vertex: float('infinity') for vertex in graph}
-    distances[starting_vertex] = 0
+    def dijkstra(self, start):
+        dis, vis, hq = {}, {}, []
 
-    entry_lookup = {}
-    pq = []
+        for node in self.adj.keys():
+            dis[node] = float('inf')
+            vis[node] = False
 
-    for vertex, distance in distances.items():
-        entry = [distance, vertex]
-        entry_lookup[vertex] = entry
-        heapq.heappush(pq, entry)
+        dis[start], vis[start] = 0, True
+        heappush(hq, (0, start))
 
-    while len(pq) > 0:
-        current_distance, current_vertex = heapq.heappop(pq)
+        while hq:
+            (d, node) = heappop(hq)
+            vis[node] = True
 
-        for neighbor, neighbor_distance in graph[current_vertex].items():
-            distance = distances[current_vertex] + neighbor_distance
-            if distance < distances[neighbor]:
-                distances[neighbor] = distance
-                entry_lookup[neighbor][0] = distance
+            for n, weight in self.adj[node].items():
+                if (not vis[n]) and (d + weight < dis[n]):
+                    dis[n] = d + weight
+                    heappush(hq, (dis[n], n))
 
-    return distances
+        return dis
 
 
 def make_reciprocity(graph,v,u):
@@ -64,24 +66,11 @@ def magica(): #Roda oque é pedido para cada teste
 
   quantidade_pizzas = int(input())
   if(quantidade_pizzas == 0):
-  	return 0
+    return 0
   lista_locais = [int(i) for i in input().split()] #LISTA DE CASAS
-  #aux = lista_locais.split(" ")
-  #lista_locais = [int(i) for i in aux] #LISTA DE VERTICES EM INTEIROS
 
-  #i = 0
-  #while i < m: #CRIANDO AS ARESTAS
-  #  a = lista_caminhos[i][0]
-  #  b = lista_caminhos[i][1]
-  #  c = lista_caminhos[i][2]
-  #  grafo_dic[a][b] = c
-  #  i = i+1
-
-  #for v in grafo_dic:
-  #  for u in grafo_dic[v]:
-  #      check_reciprocity(grafo_dic,v,u)
-
-  distance = dijkstra(grafo_dic, 1)
+  d = Dijkstra(grafo_dic)
+  distance = d.dijkstra(1)
   
   for casa in lista_locais: #CONTANDO O PERCURSO
     soma = soma + distance[casa]
